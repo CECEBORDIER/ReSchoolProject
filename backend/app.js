@@ -7,6 +7,7 @@ var cors = require('cors')
 var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var productRouter = require('./routes/product');
+var userRouter = require('./routes/user');
 // view engine setup
 var express = require('express');
 var app = express()
@@ -34,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', productRouter);
-
+app.use('/', userRouter);
 
 
 
