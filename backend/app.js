@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cors = require('cors')
 var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
-var ProductModel = require('./models/products')
+var productRouter = require('./routes/product');
 // view engine setup
 var express = require('express');
 var app = express()
@@ -20,7 +20,7 @@ var corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }
-app.use(cors())
+app.use(cors(corsOptions))
 
 
 app.set('views', path.join(__dirname, 'views'));
@@ -33,113 +33,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/', productRouter);
 
-
-app.post('/product/create', function (req, res, next) {
-  const product = new ProductModel({
-    title: req.body.title,
-    description: req.body.description,
-  });
-  product.save().then(
-    () => {
-      res.status(201).json({
-        message: 'Post saved successfully!'
-      });
-
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-});
-
-app.put('/products/:param/', (req, res, next) => {
-  const product = new ProductModel({
-    _id: req.params.param,
-    title: req.body.title,
-    description: req.body.description,
-  });
-  console.log(product)
-  ProductModel.updateOne({ _id: req.params.param }, product).then(
-    () => {
-      res.status(201).json({
-        message: 'Thing updated successfully!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-});
-app.delete('/delteAll', (req, res, next) => {
-  ProductModel.deleteMany({ }).then(
-    () => {
-      res.status(200).json({
-        message: 'Deleted!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-});
-
-
-app.delete('/delteProduct/:id', (req, res, next) => {
-  ProductModel.deleteOne({ _id: req.params.id }).then(
-    () => {
-      res.status(200).json({
-        message: 'Deleted!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-});
-
-
-app.get('/product/:param/', cors(corsOptions), function (req, res, next) {
-  ProductModel.findOne({
-    _id: req.params.param
-  }).then(
-    (product) => {
-      res.status(200).json(product);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-})
-
-app.get('/products', cors(corsOptions), function (req, res, next) {
-  ProductModel.find().then(
-    (products) => {
-      res.status(200).json(products);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-})
 
 
 
