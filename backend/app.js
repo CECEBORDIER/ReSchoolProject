@@ -7,13 +7,20 @@ var cors = require('cors')
 var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var productRouter = require('./routes/product');
-var userRouter = require('./routes/user');
+var usersRouter = require('./routes/user.routes');
+var authRouter = require('./routes/auth.routes');
+// var userRouter = require('./routes/user');
 // view engine setup
 var express = require('express');
 var app = express()
-
+const db = require("./models");
+const Role = db.role;
 // Body Pareser
 app.use(bodyParser.urlencoded({ extended: true }));
+var { config } = require('dotenv'); 
+
+var mongoDB = process.env.DB_URI 
+
 
 // CORS configuration
 var corsOptions = {
@@ -22,6 +29,21 @@ var corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }
 app.use(cors(corsOptions))
+
+
+
+db.mongoose
+  .connect(mongoDB)
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    initial();
+  })
+  .catch(err => {
+    console.error("Connection error", err);
+    process.exit();
+  });
+
+
 
 
 app.set('views', path.join(__dirname, 'views'));
@@ -35,8 +57,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', productRouter);
-app.use('/', userRouter);
-
+app.use('/', usersRouter);
+app.use('/', authRouter);
 
 
 // catch 404 and forward to error handler
@@ -56,5 +78,43 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
+
+
+
+function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "user"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+      new Role({
+        name: "moderator"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'moderator' to roles collection");
+      });
+
+      new Role({
+        name: "admin"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'admin' to roles collection");
+      });
+    }
+  });
+}
 
 module.exports = app;

@@ -1,92 +1,130 @@
-import React from "react";
-import {BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import  AddProduct from "./components/products/add-product.components"
-import ProductList from "./components/products/product-list.components"
-import Product from "./components/products/edit.component"
-import { AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
-// This site has 3 pages, all of which are rendered
-// dynamically in the browser (not server rendered).
-//
-// Although the page does not ever refresh, notice how
-// React Router keeps the URL up to date as you navigate
-// through the site. This preserves the browser history,
-// making sure things like the back button and bookmarks
-// work properly.
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Router, Switch, Route, Link } from "react-router-dom";
 
-export default function BasicExample() {
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+
+import Login from "./components/user/Login";
+import Register from "./components/user/Register";
+import Home from "./components/UserBoard/Home";
+import Profile from "./components/user/Profile";
+import BoardUser from "./components/UserBoard/BoardUser";
+import BoardModerator from "./components/UserBoard/BoardModerator";
+import BoardAdmin from "./components/UserBoard/BoardAdmin";
+
+import { logout } from "./actions/auth";
+import { clearMessage } from "./actions/message";
+
+import { history } from "./helpers/history";
+
+const App = () => {
+  const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+  const [showAdminBoard, setShowAdminBoard] = useState(false);
+
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    history.listen((location) => {
+      dispatch(clearMessage()); // clear message when changing location
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (currentUser) {
+      setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
+      setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
+    }
+  }, [currentUser]);
+
+  const logOut = () => {
+    dispatch(logout());
+  };
+
   return (
-    
-    <Router>
+    <Router history={history}>
       <div>
-      
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/account">Account</Link>
-          </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          
-        </ul>
+        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <Link to={"/"} className="navbar-brand">
+            FindIt
+          </Link>
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/home"} className="nav-link">
+                Home
+              </Link>
+            </li>
 
-        <hr />
+            {showModeratorBoard && (
+              <li className="nav-item">
+                <Link to={"/mod"} className="nav-link">
+                  Moderator Board
+                </Link>
+              </li>
+            )}
 
-        {/*
-          A <Switch> looks through all its children <Route>
-          elements and renders the first one whose path
-          matches the current URL. Use a <Switch> any time
-          you have multiple routes, but you want only one
-          of them to render at a time
-        */}
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/account">
-            <Account />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          
-          <Route path="/product/:param" component={Product} >
-          </Route>
-  
-        </Switch>
+            {showAdminBoard && (
+              <li className="nav-item">
+                <Link to={"/admin"} className="nav-link">
+                  Admin Board
+                </Link>
+              </li>
+            )}
+
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/user"} className="nav-link">
+                  User
+                </Link>
+              </li>
+            )}
+          </div>
+
+          {currentUser ? (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/profile"} className="nav-link">
+                  {currentUser.username}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a href="/login" className="nav-link" onClick={logOut}>
+                  LogOut
+                </a>
+              </li>
+            </div>
+          ) : (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/login"} className="nav-link">
+                  Login
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link to={"/register"} className="nav-link">
+                  Sign Up
+                </Link>
+              </li>
+            </div>
+          )}
+        </nav>
+
+        <div className="container mt-3">
+          <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/profile" component={Profile} />
+            <Route path="/user" component={BoardUser} />
+            <Route path="/mod" component={BoardModerator} />
+            <Route path="/admin" component={BoardAdmin} />
+          </Switch>
+        </div>
       </div>
     </Router>
   );
-}
+};
 
-// You can think of these components as "pages"
-// in your app.
-
-function Home() {
-  return (
-    <div>
-      <h2>Welcome</h2>
-    </div>
-  );
-}
-function Account() {
-  return (
-    <div>
-      <h2>My Account</h2>
-      
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-      <ProductList  ></ProductList>
-      <AddProduct ></AddProduct>
-      
-    </div>
-  );
-}
+export default App;

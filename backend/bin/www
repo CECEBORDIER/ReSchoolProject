@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-require('../initDB')();
+require('../config/initDB')();
 /**
  * Module dependencies.
  */

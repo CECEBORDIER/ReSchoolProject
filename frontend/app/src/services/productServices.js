@@ -1,5 +1,5 @@
 import axios from 'axios';
-import http from "../../../http-common";
+import http from "../http-common";
 
 
 
