@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import ProductService from "./Services/productServices";
-import { TextField, Button, withStyles } from "@material-ui/core"
+import ProductService from "../../services/productServices";
 
 
 

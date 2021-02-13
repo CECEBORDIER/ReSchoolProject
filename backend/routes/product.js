@@ -2,22 +2,22 @@ var express = require('express');
 var router = express.Router();
 var ProductModel = require('../models/products')
 var productCtrl = require('../controllers/products');
-const auth = require('../middleware/auth')
+// const auth = require('../middleware/auth')
 
 
 
-router.post('/product/create', auth, productCtrl.createProduct);
+router.post('/product/create',  productCtrl.createProduct);
 
-router.put('/products/:param/', auth, productCtrl.updateOneProduct);
+router.put('/products/:param/',  productCtrl.updateOneProduct);
 
-router.delete('/delteAll', auth, productCtrl.deleteAllProducts);
+router.delete('/delteAll',  productCtrl.deleteAllProducts);
 
 
-router.delete('/delteProduct/:id',auth, productCtrl.deleteOneProduct);
+router.delete('/delteProduct/:id', productCtrl.deleteOneProduct);
 
-router.get('/product/:param/',auth, productCtrl.getOneProduct)
+router.get('/product/:param/', productCtrl.getOneProduct)
 
-router.get('/products',auth, productCtrl.getAllProduct)
+router.get('/products', productCtrl.getAllProduct)
 
 
 

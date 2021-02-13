@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProductService from "./Services/productServices";
+import ProductService from "../../services/productServices";
 import {
     BrowserRouter as Router,
     Switch,
@@ -138,7 +138,7 @@ export default class ProductList extends Component {
               </div>
 
               <Link
-                to={"/product/"+currentProduct._id}>
+                to={"/editProduct/"+currentProduct._id}>
                 Edit
               </Link>
             </div>

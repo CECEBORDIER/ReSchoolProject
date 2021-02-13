@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ProductService from "./Services/productServices";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import ProductService from "../../services/productServices";
+
 
 export default class Product extends Component {
     constructor(props) {

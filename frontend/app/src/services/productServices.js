@@ -6,7 +6,7 @@ import http from "../http-common";
 class ProductService {
 
   getAll() {
-    return http.get('products');
+    return http.get('/products');
   }
 
   create(data) {

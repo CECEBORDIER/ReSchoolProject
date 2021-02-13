@@ -17,6 +17,9 @@ import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
 import { history } from "./helpers/history";
+import AddProduct from "./components/products/add-product.components";
+import ProductList from "./components/products/product-list.components";
+import EditProduct from "./components/products/edit.component";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -95,20 +98,20 @@ const App = () => {
               </li>
             </div>
           ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/login"} className="nav-link">
+                    Login
                 </Link>
-              </li>
+                </li>
 
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
+                <li className="nav-item">
+                  <Link to={"/register"} className="nav-link">
+                    Sign Up
                 </Link>
-              </li>
-            </div>
-          )}
+                </li>
+              </div>
+            )}
         </nav>
 
         <div className="container mt-3">
@@ -116,7 +119,11 @@ const App = () => {
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/profile" component={Profile}>
+              <ProductList></ProductList>
+              <AddProduct></AddProduct>
+            </Route>
+            <Route path="/editProduct" component={EditProduct} />
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
