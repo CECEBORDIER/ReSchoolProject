@@ -25,9 +25,7 @@ class ProductService {
   deleteAll() {
     return http.delete(`/delteAll`);
   }
-  findByTitle(title) {
-    return http.delete('products');
-  }
+ 
   findByTitle(title) {
     return http.get(`/products?title=${title}`);
   }

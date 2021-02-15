@@ -1,6 +1,6 @@
-const { authJwt } = require("../middleware");
+const { authJwt } = require("../../middleware");
 var express = require('express');
-const controller = require("../controllers/user.controller");
+const controller = require("../../controllers/users/user.controller");
 var router = express.Router();
 ``
 
@@ -13,6 +13,7 @@ var router = express.Router();
   router.get("/mod", [authJwt.verifyToken, authJwt.isModerator], controller.moderatorBoard);
 
   router.get("/admin",[authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
+
   
-  
+
   module.exports = router;

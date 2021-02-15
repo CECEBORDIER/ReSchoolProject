@@ -1,7 +1,8 @@
-const config = require("../config/auth.config");
-const db = require("../models");
+const config = require("../../config/auth.config");
+const db = require("../../models/users");
 const User = db.user;
 const Role = db.role;
+
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
@@ -10,7 +11,10 @@ exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    userFavoritsProducts: null,
+    userAdds: null,
+
   });
 
   user.save((err, user) => {
@@ -103,7 +107,23 @@ exports.signin = (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
+        userFavoritsProducts: user.userFavoritsProducts,
+        productId: user.productId,
         accessToken: token
       });
     });
-};
+  }
+
+  exports.createUserAdd = (req, res, next) => {
+    User.updateOne(
+      { _id : req.body.id},
+      {$push: {productId: req.body.productId}}, 
+      function(err, result) {
+        if(err) {
+          res.send(err);
+        }else {
+          res.json(result);
+        }
+      }
+    );
+  };

@@ -6,14 +6,14 @@ var logger = require('morgan');
 var cors = require('cors')
 var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
-var productRouter = require('./routes/product');
-var usersRouter = require('./routes/user.routes');
-var authRouter = require('./routes/auth.routes');
+var productRouter = require('./routes/products/product');
+var usersRouter = require('./routes/users/user.routes');
+var authRouter = require('./routes/users/auth.routes');
 // var userRouter = require('./routes/user');
 // view engine setup
 var express = require('express');
 var app = express()
-const db = require("./models");
+const db = require("./models/users");
 const Role = db.role;
 // Body Pareser
 app.use(bodyParser.urlencoded({ extended: true }));

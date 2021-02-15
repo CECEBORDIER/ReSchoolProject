@@ -1,12 +1,15 @@
-var ProductModel = require('../models/products')
+var ProductModel = require('../../models/products/products')
 
 
 
 exports.createProduct = function (req, res, next) {
     const product = new ProductModel({
+        productId: req.body.productId,
         title: req.body.title,
         description: req.body.description,
+        numberUserFavorits: req.body.numberUserFavorits
     });
+    console.log(product)
     product.save().then(
         () => {
             res.status(201).json({
@@ -20,7 +23,7 @@ exports.createProduct = function (req, res, next) {
                 error: error
             });
         }
-    );
+    )
 }
 
 exports.getOneProduct = function (req, res, next) {

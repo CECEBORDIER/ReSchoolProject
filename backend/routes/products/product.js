@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var ProductModel = require('../models/products')
-var productCtrl = require('../controllers/products');
+var ProductModel = require('../../models/products/products')
+var productCtrl = require('../../controllers/products/products');
 // const auth = require('../middleware/auth')
 
 
 
 router.post('/product/create',  productCtrl.createProduct);
+
 
 router.put('/products/:param/',  productCtrl.updateOneProduct);
 

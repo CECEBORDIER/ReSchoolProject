@@ -119,9 +119,10 @@ const App = () => {
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile}>
-              <ProductList></ProductList>
-              <AddProduct></AddProduct>
+            <Route exact path="/profile" >
+            <Profile> </Profile>
+             <ProductList></ProductList>
+              <AddProduct></AddProduct> 
             </Route>
             <Route path="/editProduct" component={EditProduct} />
             <Route path="/user" component={BoardUser} />
